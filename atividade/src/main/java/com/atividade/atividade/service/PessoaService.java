@@ -25,6 +25,11 @@ public class PessoaService {
         return listaDTO;
     }
 
+    public PessoaDTO getById(Long id){
+        PessoaEntity pessoa = pessoaRepository.findById(id).orElse(null);
+        return toPessoaDTO(pessoa);
+    }
+
     public PessoaDTO save(PessoaDTO pessoaDTO){
         PessoaEntity pessoa = this.toPessoa(pessoaDTO);
 
