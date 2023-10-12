@@ -3,6 +3,7 @@ package com.atividade.atividade.controller;
 import java.util.List;
 
 import com.atividade.atividade.dto.CarroDTO;
+import com.atividade.atividade.dto.LivroDTO;
 import com.atividade.atividade.dto.PessoaDTO;
 import com.atividade.atividade.service.CarroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class CarroController {
         }
     }
 
-    @GetMapping("{id}")
-    private ResponseEntity<CarroDTO> getById(@RequestParam("id") Long id) {
+    @GetMapping("/{id}")
+    private ResponseEntity<CarroDTO> getById(@PathVariable("id") Long id) {
         try {
             CarroDTO carroDTO = service.getById(id);
             return new ResponseEntity<>(carroDTO, HttpStatus.OK);
@@ -48,8 +49,23 @@ public class CarroController {
         }
     }
 
-    @GetMapping("erro")
-    private ResponseEntity<List<PessoaDTO>> exemploErro() {
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    @PutMapping
+    private ResponseEntity<CarroDTO> edit(@RequestBody CarroDTO carroDTO){
+        try {
+            CarroDTO carroSalvo = service.edit(carroDTO);
+            return new ResponseEntity<>(carroSalvo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
-}
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<HttpStatus> delete(@PathVariable("id")Long id){
+        try {
+            String response = service.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    }

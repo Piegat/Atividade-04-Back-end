@@ -3,6 +3,7 @@ package com.atividade.atividade.controller;
 
 import java.util.List;
 
+import com.atividade.atividade.dto.LivroDTO;
 import com.atividade.atividade.dto.PessoaDTO;
 import com.atividade.atividade.service.PessoaService;
 import lombok.Getter;
@@ -30,8 +31,8 @@ public class PessoaController {
         }
     }
 
-    @GetMapping("{id}")
-    private ResponseEntity<PessoaDTO> getById(@RequestParam("id") Long id){
+    @GetMapping("/{id}")
+    private ResponseEntity<PessoaDTO> getById(@PathVariable("id") Long id){
         try {
             PessoaDTO pessoaDTO = pessoaService.getById(id);
             return new ResponseEntity<>(pessoaDTO, HttpStatus.OK);
@@ -51,7 +52,22 @@ public class PessoaController {
         }
     }
 
-    @GetMapping("erro")
-    private ResponseEntity<List<PessoaDTO>> exemploErro(){
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    @PutMapping
+    private ResponseEntity<PessoaDTO> edit(@RequestBody PessoaDTO pessoaDTO){
+        try {
+            PessoaDTO pessoaSalva = pessoaService.edit(pessoaDTO);
+            return new ResponseEntity<>(pessoaSalva, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<HttpStatus> delete(@PathVariable("id")Long id){
+        try {
+            String response = pessoaService.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }}

@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.atividade.atividade.dto.CarroDTO;
+import com.atividade.atividade.dto.PessoaDTO;
 import com.atividade.atividade.entity.CarroEntity;
+import com.atividade.atividade.entity.PessoaEntity;
 import com.atividade.atividade.repository.CarroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class CarroService {
@@ -36,6 +39,28 @@ public class CarroService {
         CarroEntity carroSalvo = carroRepository.save(carro);
 
         return this.toCarroDTO(carroSalvo);
+    }
+
+    public CarroDTO edit(CarroDTO carroDTO){
+        CarroEntity carro = this.toCarro(carroDTO);
+        CarroEntity carroBanco = this.carroRepository.findById(carroDTO.getId()).orElse(null);
+
+        Assert.notNull(carroBanco, "Carro com esse ID não encontrado");
+
+        CarroEntity carroSalvo = carroRepository.save(carro);
+
+        return this.toCarroDTO(carroSalvo);
+    }
+
+    public String delete(Long id){
+        CarroEntity carroBanco = this.carroRepository.findById(id).orElse(null);
+
+        Assert.notNull(carroBanco, "Carro com esse ID não encontrado");
+
+
+        carroRepository.deleteById(id);
+        return "Deletado com sucesso!";
+
     }
 
     private CarroDTO toCarroDTO(CarroEntity carro) {

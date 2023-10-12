@@ -3,11 +3,14 @@ package com.atividade.atividade.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.atividade.atividade.dto.LivroDTO;
 import com.atividade.atividade.dto.PessoaDTO;
+import com.atividade.atividade.entity.LivroEntity;
 import com.atividade.atividade.entity.PessoaEntity;
 import com.atividade.atividade.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class PessoaService {
@@ -36,6 +39,28 @@ public class PessoaService {
         PessoaEntity pessoasalva = pessoaRepository.save(pessoa);
 
         return this.toPessoaDTO(pessoasalva);
+    }
+
+    public PessoaDTO edit(PessoaDTO pessoaDTO){
+        PessoaEntity pessoa = this.toPessoa(pessoaDTO);
+        PessoaEntity pessoaBanco = this.pessoaRepository.findById(pessoaDTO.getId()).orElse(null);
+
+        Assert.notNull(pessoaBanco, "Pessoa com esse ID não encontrado");
+
+        PessoaEntity pessoaSalvo = pessoaRepository.save(pessoa);
+
+        return this.toPessoaDTO(pessoaSalvo);
+    }
+
+    public String delete(Long id){
+        PessoaEntity pessoaBanco = this.pessoaRepository.findById(id).orElse(null);
+        System.out.println(id);
+        Assert.notNull(pessoaBanco, "Pessoa com esse ID não encontrado");
+
+
+        pessoaRepository.deleteById(id);
+        return "Deletado com sucesso!";
+
     }
 
     private PessoaDTO toPessoaDTO(PessoaEntity pessoa) {

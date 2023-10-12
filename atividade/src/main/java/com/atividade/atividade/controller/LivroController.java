@@ -31,8 +31,8 @@ public class LivroController {
         }
     }
 
-    @GetMapping("{id}")
-    private ResponseEntity<LivroDTO> getById(@RequestParam("id") Long id){
+    @GetMapping("/{id}")
+    private ResponseEntity<LivroDTO> getById(@PathVariable("id") Long id){
         try {
             LivroDTO livroDTO = service.getById(id);
             return new ResponseEntity<>(livroDTO, HttpStatus.OK);
@@ -52,7 +52,24 @@ public class LivroController {
         }
     }
 
-    @GetMapping("erro")
-    private ResponseEntity<List<PessoaDTO>> exemploErro(){
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-    }}
+    @PutMapping
+    private ResponseEntity<LivroDTO> edit(@RequestBody LivroDTO livroDTO){
+        try {
+            LivroDTO livroSalvo = service.edit(livroDTO);
+            return new ResponseEntity<>(livroSalvo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<HttpStatus> delete(@PathVariable("id")Long id){
+        try {
+            String response = service.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+}
